@@ -1,0 +1,60 @@
+# The reference crew's two checkers with their prose, the tool and knowledge steps done.
+apiVersion: kubemoot.ai/v1alpha1
+kind: Agent
+metadata:
+  name: structure-checker
+  namespace: TEAM
+  labels:
+    kubemoot.ai/crew: architecture-review
+    kubemoot.ai/role: specialist
+spec:
+  type: chat
+  description: "Checks an ADL specification's structure: every definition described, every name an assertion uses defined."
+  discussRole: specialist
+  capabilities: [tool-calling]
+  discussChannels: [review]
+  triageSummary: "Reviews an ADL specification for missing descriptions and assertions about undefined components."
+  discussKeywords: [adl, review, specification, spec, define, description, assert, never, rule, component]
+  promptRefs: [discussion-protocol, response-style, structure-checker-system]
+  enabledTools: [fetch]
+  ragSources:
+    - name: adl-material
+      topK: 3
+  temperature: "0.0"
+  maxTokens: 4096
+  deployment:
+    replicas: 1
+    port: 8080
+    env:
+      - name: QUARKUS_LANGCHAIN4J_OLLAMA_TIMEOUT
+        value: "10m"
+---
+apiVersion: kubemoot.ai/v1alpha1
+kind: Agent
+metadata:
+  name: contradiction-checker
+  namespace: TEAM
+  labels:
+    kubemoot.ai/crew: architecture-review
+    kubemoot.ai/role: specialist
+spec:
+  type: chat
+  description: "Finds rules in an ADL specification that contradict another rule of the same component."
+  discussRole: specialist
+  capabilities: [tool-calling, reasoning]
+  discussChannels: [review]
+  triageSummary: "Reviews an ADL specification for a rule that breaks a NEVER of its own component."
+  discussKeywords: [adl, review, specification, never, contradict, conflict, rule]
+  promptRefs: [discussion-protocol, response-style, contradiction-checker-system]
+  enabledTools: [fetch]
+  ragSources:
+    - name: adl-material
+      topK: 3
+  temperature: "0.1"
+  maxTokens: 4096
+  deployment:
+    replicas: 1
+    port: 8080
+    env:
+      - name: QUARKUS_LANGCHAIN4J_OLLAMA_TIMEOUT
+        value: "10m"

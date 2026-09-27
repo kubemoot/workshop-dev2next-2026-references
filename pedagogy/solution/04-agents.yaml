@@ -1,0 +1,64 @@
+# The reference crew's two specialists with their prose, the tool and knowledge steps
+# done. The coordinator is as the bundle gives it; its synthesis module adds one rule
+# (step 8 of the recipe): WHEN the material checker reports a wrong key or a later-week
+# question THEN correct it in the final quiz.
+apiVersion: kubemoot.ai/v1alpha1
+kind: Agent
+metadata:
+  name: material-writer
+  namespace: TEAM
+  labels:
+    kubemoot.ai/crew: pedagogy
+    kubemoot.ai/role: specialist
+spec:
+  type: chat
+  description: "Writes quizzes and exercises with answer keys for an introductory Python course, at a given week's level."
+  discussRole: specialist
+  capabilities: [tool-calling, reasoning]
+  discussChannels: [course]
+  triageSummary: "Drafts quiz questions, exercises, and answer keys for a given week of the Python course."
+  discussKeywords: [quiz, question, questions, exercise, answer, key, week, chapter, python, students]
+  promptRefs: [discussion-protocol, response-style, material-writer-system]
+  enabledTools: [fetch]
+  ragSources:
+    - name: textbook
+      topK: 3
+    - name: syllabus
+      topK: 3
+  temperature: "0.2"
+  maxTokens: 4096
+  deployment:
+    replicas: 1
+    port: 8080
+    env:
+      - name: QUARKUS_LANGCHAIN4J_OLLAMA_TIMEOUT
+        value: "10m"
+---
+apiVersion: kubemoot.ai/v1alpha1
+kind: Agent
+metadata:
+  name: material-checker
+  namespace: TEAM
+  labels:
+    kubemoot.ai/crew: pedagogy
+    kubemoot.ai/role: specialist
+spec:
+  type: chat
+  description: "Checks drafted questions and answer keys against the textbook and the week's level."
+  discussRole: specialist
+  capabilities: [tool-calling, reasoning]
+  discussChannels: [course]
+  triageSummary: "Verifies answer keys and flags questions from a later week in a drafted quiz."
+  discussKeywords: [quiz, question, answer, key, check, week]
+  promptRefs: [discussion-protocol, response-style, material-checker-system]
+  ragSources:
+    - name: textbook
+      topK: 3
+  temperature: "0.1"
+  maxTokens: 2048
+  deployment:
+    replicas: 1
+    port: 8080
+    env:
+      - name: QUARKUS_LANGCHAIN4J_OLLAMA_TIMEOUT
+        value: "10m"

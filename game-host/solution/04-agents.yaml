@@ -1,0 +1,57 @@
+# The reference crew's two specialists with their prose, the tool and knowledge steps
+# done. The coordinator is as the bundle gives it.
+apiVersion: kubemoot.ai/v1alpha1
+kind: Agent
+metadata:
+  name: rules-keeper
+  namespace: TEAM
+  labels:
+    kubemoot.ai/crew: game-host
+    kubemoot.ai/role: specialist
+spec:
+  type: chat
+  description: "Knows the rules of chat games, keeps the board, and judges every move."
+  discussRole: specialist
+  capabilities: [tool-calling, reasoning]
+  discussChannels: [games]
+  triageSummary: "Plays and judges games in progress: rules, the board, the next move, wins and draws."
+  discussKeywords: [game, play, rules, move, board, turn, win, draw, tic-tac-toe, nim, hangman, questions]
+  promptRefs: [discussion-protocol, response-style, rules-keeper-system]
+  enabledTools: [fetch]
+  ragSources:
+    - name: game-rules
+      topK: 3
+  temperature: "0.2"
+  maxTokens: 2048
+  deployment:
+    replicas: 1
+    port: 8080
+    env:
+      - name: QUARKUS_LANGCHAIN4J_OLLAMA_TIMEOUT
+        value: "10m"
+---
+apiVersion: kubemoot.ai/v1alpha1
+kind: Agent
+metadata:
+  name: game-inventor
+  namespace: TEAM
+  labels:
+    kubemoot.ai/crew: game-host
+    kubemoot.ai/role: specialist
+spec:
+  type: chat
+  description: "Invents new two-player games that can be played by typing in a chat."
+  discussRole: specialist
+  capabilities: [tool-calling, reasoning]
+  discussChannels: [games]
+  triageSummary: "Makes up a new game on request and teaches its rules; not for moves in a game already being played."
+  discussKeywords: [invent, new, create, design, make up, game]
+  promptRefs: [discussion-protocol, response-style, game-inventor-system]
+  temperature: "0.8"
+  maxTokens: 2048
+  deployment:
+    replicas: 1
+    port: 8080
+    env:
+      - name: QUARKUS_LANGCHAIN4J_OLLAMA_TIMEOUT
+        value: "10m"

@@ -44,6 +44,9 @@ spec:
   promptRefs: [discussion-protocol, response-style, node-watcher-system]
   # Stage C adds the tool; until then the agent answers from nothing and should say so.
   enabledTools: [resources_list, resources_get, events_list, list_api_resources, explain_resource]
+  # Stage E: the operator docs, once knowledge/ragsource.yaml is applied.
+  ragSources:
+    - name: operator-docs
   temperature: "0.2"
   maxTokens: 4096
   deployment:

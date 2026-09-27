@@ -36,13 +36,16 @@ spec:
   type: chat
   description: "Reads an ADL specification through the fetch tool and reports the rules it violates."
   discussRole: tooler
-  think: false
-  capabilities: [tool-calling, http]
+  think: true
+  capabilities: [tool-calling, reasoning, http]
   discussChannels: [review]
   triageSummary: "Reviews ADL architecture specifications: fetches the spec from a URL and reports contradictions, undefined names in ASSERTs, and missing DESCRIPTIONs."
   discussKeywords: [adl, review, spec, specification, assert, never, define, component, violates]
   promptRefs: [discussion-protocol, response-style, adl-reviewer-system]
   enabledTools: [fetch]
+  # Stage E: the material, once knowledge/ragsource.yaml is applied.
+  ragSources:
+    - name: adl-material
   temperature: "0.2"
   maxTokens: 4096
   deployment:

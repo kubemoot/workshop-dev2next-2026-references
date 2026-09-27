@@ -43,6 +43,9 @@ spec:
   discussKeywords: [exam, question, questions, quiz, multiple-choice, week, syllabus, deployments]
   promptRefs: [discussion-protocol, response-style, question-writer-system]
   enabledTools: [fetch]
+  # Stage E: the syllabus and notes, once knowledge/ragsource.yaml is applied.
+  ragSources:
+    - name: course-material
   temperature: "0.4"
   maxTokens: 4096
   deployment:
@@ -71,6 +74,8 @@ spec:
   discussKeywords: [exam, question, questions, key, answer, check, verify]
   promptRefs: [discussion-protocol, response-style, answer-checker-system]
   enabledTools: [fetch]
+  ragSources:
+    - name: course-material
   temperature: "0.1"
   maxTokens: 4096
   deployment:

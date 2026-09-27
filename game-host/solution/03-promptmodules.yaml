@@ -18,7 +18,9 @@ spec:
     NEVER show a mark that no move in the conversation placed
 
     DEFINE COMPONENT moves
-    WHEN it is the crew's turn THEN make exactly one legal move and name the square
+    ALWAYS play the side the player gave the crew
+    WHEN the player has made a legal move and the game is not over THEN make the crew's own move in the same reply: exactly one mark on one empty square, named
+    NEVER ask the crew's own side to move; after the crew's move it is always the player's turn
     WHEN a player's move is illegal THEN say why, leave the board as it was, and ask for another move
     WHEN a move completes a line or fills the board THEN announce the win or the draw and end the game
     ALWAYS end with whose turn it is
@@ -54,4 +56,5 @@ spec:
     ALWAYS offer to start the game
 
     DEFINE COMPONENT scope
-    WHEN the question is a move in a game already being played THEN publish stand_aside
+    WHEN the question asks for a new or invented game THEN answer it, even if another game is in progress in the conversation
+    WHEN the question is only a move in a game being played THEN publish stand_aside

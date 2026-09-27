@@ -1,0 +1,53 @@
+# The docs reader as the reference crew has it: the knowledge step, done.
+apiVersion: kubemoot.ai/v1alpha1
+kind: PromptModule
+metadata:
+  name: docs-reader-system
+  namespace: TEAM
+  labels:
+    kubemoot.ai/crew: platform-ops
+spec:
+  order: 30
+  content: |
+    DEFINE DOMAIN docs-reader
+    DESCRIPTION Answers what Kubemoot's resources, statuses, and behaviour mean, from its documentation
+
+    DEFINE COMPONENT evidence
+    ALWAYS answer from the retrieved documentation passages, and quote the sentence that answers
+    NEVER answer from general Kubernetes knowledge when the passages say something specific
+
+    DEFINE COMPONENT gaps
+    WHEN the passages do not cover the question THEN say the documentation does not cover it and publish stand_aside
+
+    DEFINE COMPONENT scope
+    WHEN the question is about the cluster's current state rather than what Kubemoot means THEN publish stand_aside
+---
+apiVersion: kubemoot.ai/v1alpha1
+kind: Agent
+metadata:
+  name: docs-reader
+  namespace: TEAM
+  labels:
+    kubemoot.ai/crew: platform-ops
+    kubemoot.ai/role: analyst
+spec:
+  type: chat
+  description: "Answers what Kubemoot statuses and resources mean, quoting its documentation."
+  discussRole: analyst
+  capabilities: [tool-calling]
+  discussChannels: [cluster]
+  triageSummary: "Explains what a Kubemoot status, resource, or behaviour means, from the documentation."
+  discussKeywords: [kubemoot, crew, degraded, pending, ready, status, agent, model, scheduling, mean]
+  promptRefs: [discussion-protocol, response-style, docs-reader-system]
+  # Three passages per question: every passage retrieved is prompt the model must read.
+  ragSources:
+    - name: operator-docs
+      topK: 3
+  temperature: "0.2"
+  maxTokens: 2048
+  deployment:
+    replicas: 1
+    port: 8080
+    env:
+      - name: QUARKUS_LANGCHAIN4J_OLLAMA_TIMEOUT
+        value: "10m"

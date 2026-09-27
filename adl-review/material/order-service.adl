@@ -1,0 +1,29 @@
+DEFINE SYSTEM order-platform
+DESCRIPTION Takes orders from the storefront, charges the customer, and hands fulfilment to the warehouse
+
+DEFINE COMPONENT storefront
+DESCRIPTION The customer-facing web application that builds a cart and submits an order
+ALWAYS submit orders through the order-service API
+NEVER read from the orders database directly
+
+DEFINE COMPONENT order-service
+DESCRIPTION Owns the order lifecycle: created, paid, fulfilled, cancelled
+ALWAYS validate an order before charging it
+WHEN an order is paid THEN publish an order-paid event
+NEVER call the payment-provider directly
+WHEN a card is declined THEN call the payment-provider to retry once
+
+DEFINE COMPONENT payment-service
+DESCRIPTION The only component that talks to the external payment-provider
+ALWAYS record every charge attempt with its outcome
+WHEN a charge succeeds THEN notify order-service
+
+DEFINE COMPONENT warehouse-adapter
+ALWAYS consume order-paid events
+WHEN an order-paid event arrives THEN create a pick list
+NEVER change an order's state
+
+ASSERT storefront depends only on order-service
+ASSERT order-service publishes order-paid exactly once per order
+ASSERT inventory-service reserves stock before an order is paid
+ASSERT payment-service is the only caller of payment-provider

@@ -1,0 +1,30 @@
+# Two models the scheduler may pick from, by capability. No agent names a model;
+# the coordinator asks for reasoning, the specialist for tool-calling.
+apiVersion: kubemoot.ai/v1alpha1
+kind: Model
+metadata:
+  name: qwen3-8b
+  labels:
+    kubemoot.ai/crew: lab-ops
+    family: qwen3
+    params: "8b"
+    latencyClass: low
+    capability/tool-calling: "true"
+spec:
+  model: "qwen3:8b"
+  providerRef: ollama-gpu
+---
+apiVersion: kubemoot.ai/v1alpha1
+kind: Model
+metadata:
+  name: qwen3-14b
+  labels:
+    kubemoot.ai/crew: lab-ops
+    family: qwen3
+    params: "14b"
+    latencyClass: medium
+    capability/tool-calling: "true"
+    capability/reasoning: "true"
+spec:
+  model: "qwen3:14b"
+  providerRef: ollama-gpu

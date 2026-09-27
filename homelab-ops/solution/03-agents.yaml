@@ -1,0 +1,54 @@
+apiVersion: kubemoot.ai/v1alpha1
+kind: Agent
+metadata:
+  name: lab-ops-coordinator
+  labels:
+    kubemoot.ai/crew: lab-ops
+    kubemoot.ai/role: coordinator
+spec:
+  type: chat
+  description: "Coordinator for the lab-ops crew: convenes the node watcher and writes the synthesis."
+  discussRole: coordinator
+  capabilities: [tool-calling, reasoning]
+  discussChannels: [general, cluster]
+  promptRefs: [advisory-prompt, coordinator-decision-logic, synthesis-prompt]
+  temperature: "0.1"
+  maxTokens: 2048
+  deployment:
+    replicas: 1
+    port: 8080
+    env:
+      - name: KUBEMOOT_DISCUSS_ANSWER_DIRECTLY
+        value: "false"
+      - name: QUARKUS_LANGCHAIN4J_OLLAMA_TIMEOUT
+        value: "10m"
+      - name: KUBEMOOT_DISCUSS_SYNTHESIS_TIMEOUT_SECONDS
+        value: "600"
+---
+apiVersion: kubemoot.ai/v1alpha1
+kind: Agent
+metadata:
+  name: node-watcher
+  labels:
+    kubemoot.ai/crew: lab-ops
+    kubemoot.ai/role: tooler
+spec:
+  type: chat
+  description: "Observes nodes, GPUs, and the pods on them through the kubernetes tool."
+  discussRole: tooler
+  think: false
+  capabilities: [tool-calling, kubernetes]
+  discussChannels: [cluster]
+  triageSummary: "Lists nodes and their labels, finds the GPU nodes, and lists the pods running on a node."
+  discussKeywords: [node, nodes, gpu, gpus, running, pods, workload, capacity]
+  promptRefs: [discussion-protocol, response-style, node-watcher-system]
+  # Stage C adds the tool; until then the agent answers from nothing and should say so.
+  enabledTools: [resources_list, resources_get, events_list, list_api_resources, explain_resource]
+  temperature: "0.2"
+  maxTokens: 4096
+  deployment:
+    replicas: 1
+    port: 8080
+    env:
+      - name: QUARKUS_LANGCHAIN4J_OLLAMA_TIMEOUT
+        value: "10m"

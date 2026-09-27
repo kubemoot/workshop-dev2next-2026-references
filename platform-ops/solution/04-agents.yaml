@@ -1,0 +1,60 @@
+# The reference crew's two specialists with their prose, the tool and knowledge
+# steps done. The coordinator is as the bundle gives it.
+apiVersion: kubemoot.ai/v1alpha1
+kind: Agent
+metadata:
+  name: node-watcher
+  namespace: TEAM
+  labels:
+    kubemoot.ai/crew: platform-ops
+    kubemoot.ai/role: tooler
+spec:
+  type: chat
+  description: "Observes nodes, GPUs, and the pods on them through the kubernetes tool."
+  discussRole: tooler
+  think: false
+  capabilities: [tool-calling, kubernetes]
+  discussChannels: [cluster]
+  triageSummary: "Lists nodes and their labels, finds the GPU nodes, and lists the pods running on a node."
+  discussKeywords: [node, nodes, gpu, gpus, running, pods, workload, capacity]
+  promptRefs: [discussion-protocol, response-style, node-watcher-system]
+  enabledTools: [resources_list, resources_get, pods_list, events_list]
+  ragSources:
+    - name: operator-docs
+      topK: 3
+  temperature: "0.2"
+  maxTokens: 4096
+  deployment:
+    replicas: 1
+    port: 8080
+    env:
+      - name: QUARKUS_LANGCHAIN4J_OLLAMA_TIMEOUT
+        value: "10m"
+---
+apiVersion: kubemoot.ai/v1alpha1
+kind: Agent
+metadata:
+  name: event-reader
+  namespace: TEAM
+  labels:
+    kubemoot.ai/crew: platform-ops
+    kubemoot.ai/role: tooler
+spec:
+  type: chat
+  description: "Reads the cluster's events to explain why a workload is not running."
+  discussRole: tooler
+  think: false
+  capabilities: [tool-calling, kubernetes]
+  discussChannels: [cluster]
+  triageSummary: "Explains failing, pending, and restarting pods from the cluster's events."
+  discussKeywords: [event, events, failing, pending, crash, why, error]
+  promptRefs: [discussion-protocol, response-style, event-reader-system]
+  enabledTools: [events_list, pods_get]
+  temperature: "0.2"
+  maxTokens: 4096
+  deployment:
+    replicas: 1
+    port: 8080
+    env:
+      - name: QUARKUS_LANGCHAIN4J_OLLAMA_TIMEOUT
+        value: "10m"

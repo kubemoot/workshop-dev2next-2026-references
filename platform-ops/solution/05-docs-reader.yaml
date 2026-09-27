@@ -35,7 +35,7 @@ spec:
   type: chat
   description: "Answers what Kubemoot statuses and resources mean, quoting its documentation."
   discussRole: specialist
-  capabilities: [tool-calling]
+  capabilities: [tool-calling, reasoning]
   discussChannels: [cluster]
   triageSummary: "Explains what a Kubemoot status, resource, or behaviour means, from the documentation."
   discussKeywords: [kubemoot, crew, degraded, pending, ready, status, agent, model, scheduling, mean]
@@ -52,3 +52,6 @@ spec:
     env:
       - name: QUARKUS_LANGCHAIN4J_OLLAMA_TIMEOUT
         value: "10m"
+      # No tools: without this, an agent in a namespace with a gateway gets them all.
+      - name: KUBEMOOT_GATEWAY_ENABLED
+        value: "false"

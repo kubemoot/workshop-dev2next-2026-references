@@ -18,7 +18,7 @@ spec:
   triageSummary: "Looks at the live cluster: lists the nodes, finds the GPU nodes, and lists the pods running on a node right now. Not for questions about what Kubemoot statuses or resources mean."
   discussKeywords: [node, nodes, gpu, gpus, running, pods, workload, capacity]
   promptRefs: [discussion-protocol, response-style, node-watcher-system]
-  enabledTools: [resources_list, resources_get, pods_list, events_list]
+  enabledTools: [resources_list, resources_get, pods_list]
   ragSources:
     - name: operator-docs
       topK: 3
@@ -49,7 +49,7 @@ spec:
   triageSummary: "Explains failing, pending, and restarting pods from the cluster's events."
   discussKeywords: [event, events, failing, pending, crash, why, error]
   promptRefs: [discussion-protocol, response-style, event-reader-system]
-  enabledTools: [events_list, pods_get]
+  enabledTools: [events_list, pods_list]
   temperature: "0.2"
   maxTokens: 4096
   deployment:

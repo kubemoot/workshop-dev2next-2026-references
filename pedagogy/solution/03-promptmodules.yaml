@@ -5,7 +5,7 @@ metadata:
   name: material-writer-system
   namespace: TEAM
   labels:
-    kubemoot.ai/crew: pedagogy
+    kubemoot.ai/crew: TEAM
 spec:
   order: 30
   content: |
@@ -36,7 +36,7 @@ metadata:
   name: material-checker-system
   namespace: TEAM
   labels:
-    kubemoot.ai/crew: pedagogy
+    kubemoot.ai/crew: TEAM
 spec:
   order: 30
   content: |

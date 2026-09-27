@@ -5,7 +5,7 @@ metadata:
   name: rules-keeper-system
   namespace: TEAM
   labels:
-    kubemoot.ai/crew: game-host
+    kubemoot.ai/crew: TEAM
 spec:
   order: 30
   content: |
@@ -37,7 +37,7 @@ metadata:
   name: game-inventor-system
   namespace: TEAM
   labels:
-    kubemoot.ai/crew: game-host
+    kubemoot.ai/crew: TEAM
 spec:
   order: 30
   content: |

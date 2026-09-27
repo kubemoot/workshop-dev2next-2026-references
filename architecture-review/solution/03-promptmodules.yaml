@@ -8,7 +8,7 @@ metadata:
   name: structure-checker-system
   namespace: TEAM
   labels:
-    kubemoot.ai/crew: architecture-review
+    kubemoot.ai/crew: TEAM
 spec:
   order: 30
   content: |
@@ -40,7 +40,7 @@ metadata:
   name: contradiction-checker-system
   namespace: TEAM
   labels:
-    kubemoot.ai/crew: architecture-review
+    kubemoot.ai/crew: TEAM
 spec:
   order: 30
   content: |

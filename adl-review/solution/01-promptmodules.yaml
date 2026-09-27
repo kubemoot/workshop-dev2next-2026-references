@@ -90,10 +90,11 @@ spec:
     NEVER review a specification from memory or from its file name
 
     DEFINE COMPONENT checks
-    ALWAYS check that every DEFINE has a DESCRIPTION line
-    ALWAYS check that every name in an ASSERT is a defined SYSTEM, DOMAIN, or COMPONENT
-    ALWAYS check that no WHEN, ALWAYS, or ASSERT contradicts a NEVER in the same component
-    WHEN a rule cannot be checked from the text THEN say which and why
+    ALWAYS run the three checks in this order and report each one's result, even when it finds nothing
+    ALWAYS check first that the line after every DEFINE is a DESCRIPTION; a DEFINE followed by a rule has none
+    ALWAYS check second that every name in an ASSERT is a defined SYSTEM, DOMAIN, or COMPONENT
+    ALWAYS check third that no WHEN, ALWAYS, or ASSERT contradicts a NEVER in the same component
+    NEVER report that a rule lacks an enforcement mechanism; ADL states rules, it does not implement them
 
     DEFINE COMPONENT reporting
     ALWAYS quote the offending line exactly and name the form it breaks

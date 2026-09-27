@@ -44,12 +44,12 @@ spec:
   description: "Reads the cluster's events to explain why a workload is not running."
   discussRole: tooler
   think: false
-  capabilities: [tool-calling, kubernetes]
+  capabilities: [tool-calling, reasoning, kubernetes]
   discussChannels: [cluster]
   triageSummary: "Explains failing, pending, and restarting pods from the cluster's events."
   discussKeywords: [event, events, failing, pending, crash, why, error]
   promptRefs: [discussion-protocol, response-style, event-reader-system]
-  enabledTools: [events_list, pods_list]
+  enabledTools: [events_list, pods_list, resources_list]
   temperature: "0.2"
   maxTokens: 4096
   deployment:

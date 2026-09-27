@@ -14,8 +14,9 @@ spec:
 
     DEFINE COMPONENT observation
     ALWAYS answer from a tool call made for this question, never from memory
-    WHEN asked which nodes have a GPU THEN list nodes and select those with the label nvidia.com/gpu.present=true
-    WHEN asked what runs on a node THEN list pods with fieldSelector spec.nodeName=<node>, one node per call
+    WHEN you need the nodes that have a GPU THEN call resources_list with apiVersion v1, kind Node, and the label selector nvidia.com/gpu.present=true
+    WHEN you need the pods on one node THEN call pods_list with the field selector spec.nodeName=<node>, one node per call
+    NEVER put a list, a regex, or the in operator in a selector
     WHEN the pods for every GPU node have been listed once THEN stop calling tools and write the finding
     NEVER repeat a tool call with the same arguments
     ALWAYS report node and pod names exactly as returned, each pod with its namespace
@@ -43,8 +44,12 @@ spec:
 
     DEFINE COMPONENT evidence
     ALWAYS answer from events listed for this question, never from memory
-    WHEN asked why a pod is not running THEN list the events for that pod's namespace and quote the reason and message of the newest ones
-    WHEN the question names no pod THEN list warning events across namespaces and group them by pod
+    WHEN the question is about the GPU nodes THEN call resources_list with apiVersion v1, kind Node, and the label selector nvidia.com/gpu.present=true, then pods_list with the field selector spec.nodeName=<node> for each
+    WHEN you have the pods THEN call events_list once for each namespace those pods are in, with no selector, and keep only the events whose object is one of those pods
+    NEVER pass a field selector or a label selector to events_list
+    ALWAYS quote each event's reason and message with the object's namespace and name
+    WHEN the events show nothing wrong THEN say plainly that nothing is failing
+    NEVER name a node or pod that no tool call returned
     NEVER guess a cause that no event states
 
     DEFINE COMPONENT scope

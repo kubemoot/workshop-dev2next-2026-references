@@ -5,7 +5,7 @@ metadata:
   name: node-watcher-system
   namespace: TEAM
   labels:
-    kubemoot.ai/crew: TEAM
+    kubemoot.ai/crew: platform-ops
 spec:
   order: 30
   content: |
@@ -35,7 +35,7 @@ metadata:
   name: event-reader-system
   namespace: TEAM
   labels:
-    kubemoot.ai/crew: TEAM
+    kubemoot.ai/crew: platform-ops
 spec:
   order: 30
   content: |

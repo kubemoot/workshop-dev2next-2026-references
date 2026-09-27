@@ -3,10 +3,10 @@
 apiVersion: kubemoot.ai/v1alpha1
 kind: Agent
 metadata:
-  name: TEAM-node-watcher
+  name: node-watcher
   namespace: TEAM
   labels:
-    kubemoot.ai/crew: TEAM
+    kubemoot.ai/crew: platform-ops
     kubemoot.ai/role: tooler
 spec:
   type: chat
@@ -34,10 +34,10 @@ spec:
 apiVersion: kubemoot.ai/v1alpha1
 kind: Agent
 metadata:
-  name: TEAM-event-reader
+  name: event-reader
   namespace: TEAM
   labels:
-    kubemoot.ai/crew: TEAM
+    kubemoot.ai/crew: platform-ops
     kubemoot.ai/role: tooler
 spec:
   type: chat

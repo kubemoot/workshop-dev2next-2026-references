@@ -3,10 +3,10 @@
 apiVersion: kubemoot.ai/v1alpha1
 kind: Agent
 metadata:
-  name: TEAM-rules-keeper
+  name: rules-keeper
   namespace: TEAM
   labels:
-    kubemoot.ai/crew: TEAM
+    kubemoot.ai/crew: game-host
     kubemoot.ai/role: specialist
 spec:
   type: chat
@@ -33,10 +33,10 @@ spec:
 apiVersion: kubemoot.ai/v1alpha1
 kind: Agent
 metadata:
-  name: TEAM-game-inventor
+  name: game-inventor
   namespace: TEAM
   labels:
-    kubemoot.ai/crew: TEAM
+    kubemoot.ai/crew: game-host
     kubemoot.ai/role: specialist
 spec:
   type: chat
